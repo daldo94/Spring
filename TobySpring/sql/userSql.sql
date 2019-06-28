@@ -1,0 +1,7 @@
+CREATE TABLE USERS(
+	ID varchar(10) PRIMARY KEY,
+    NAME varchar(20) NOT NULL,
+    PASSWORD varchar(10) NOT NULL
+);
+
+SELECT * FROM USERS;

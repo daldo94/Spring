@@ -2,6 +2,8 @@ package user.main;
 
 import java.sql.SQLException;
 
+import user.dao.ConnectionMaker;
+import user.dao.DConnectionMaker;
 import user.dao.UserDAO;
 import user.domain.User;
 
@@ -9,7 +11,9 @@ public class UserFunctionTestMain {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
-		UserDAO dao = new UserDAO();
+		ConnectionMaker connectionMaker = new DConnectionMaker();
+		
+		UserDAO dao = new UserDAO(connectionMaker);
 		User user = new User();
 		user.setId("dohyun");
 		user.setName("±èµµÇö");

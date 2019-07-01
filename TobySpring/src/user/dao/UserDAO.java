@@ -8,10 +8,16 @@ import java.sql.SQLException;
 
 import user.domain.User;
 
-public abstract class UserDAO {
+public class UserDAO {
+		
+		private ConnectionMaker connectionMaker;
+	
+		public UserDAO() {
+			connectionMaker = new DConnectionMaker();
+		}
 		
 		public void add(User user) throws ClassNotFoundException, SQLException{
-			Connection c = getConnection();
+			Connection c = connectionMaker.makeConnection();
 			
 			PreparedStatement ps = c.prepareStatement("INSERT INTO USERS(ID, NAME, PASSWORD) VALUES(?,?,?)");
 			ps.setString(1, user.getId());
@@ -25,7 +31,7 @@ public abstract class UserDAO {
 		}
 		
 		public User get(String id) throws ClassNotFoundException, SQLException{
-			Connection c = getConnection();
+			Connection c = connectionMaker.makeConnection();
 			
 			PreparedStatement ps = c.prepareStatement("SELECT * FROM USERS WHERE ID = ?");
 			ps.setString(1, id);
@@ -45,26 +51,4 @@ public abstract class UserDAO {
 			return user;
 		}
 		
-		public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
-		
-		
-		public class NUserDao extends UserDAO{
-
-			@Override
-			public Connection getConnection() throws ClassNotFoundException, SQLException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-		}
-		
-		public class DUserDao extends UserDAO{
-
-			@Override
-			public Connection getConnection() throws ClassNotFoundException, SQLException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-		}
 }

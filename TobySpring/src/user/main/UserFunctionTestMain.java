@@ -10,7 +10,6 @@ public class UserFunctionTestMain {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		UserDAO dao = new UserDAO();
-		
 		User user = new User();
 		user.setId("dohyun");
 		user.setName("±èµµÇö");

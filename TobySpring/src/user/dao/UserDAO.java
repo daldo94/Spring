@@ -11,8 +11,7 @@ import user.domain.User;
 public class UserDAO {
 		
 		public void add(User user) throws ClassNotFoundException, SQLException{
-			Class.forName("com.mysql.jdbc.Driver"); //DB Driver Load
-			Connection c = DriverManager.getConnection("jdbc:mysql://localhost/spring_db","dohyun","1234");
+			Connection c = getConnection();
 			
 			PreparedStatement ps = c.prepareStatement("INSERT INTO USERS(ID, NAME, PASSWORD) VALUES(?,?,?)");
 			ps.setString(1, user.getId());
@@ -26,8 +25,7 @@ public class UserDAO {
 		}
 		
 		public User get(String id) throws ClassNotFoundException, SQLException{
-			Class.forName("com.mysql.jdbc.Driver"); //DB Driver Load
-			Connection c = DriverManager.getConnection("jdbc:mysql://localhost/spring_db","dohyun","1234");
+			Connection c = getConnection();
 			
 			PreparedStatement ps = c.prepareStatement("SELECT * FROM USERS WHERE ID = ?");
 			ps.setString(1, id);
@@ -45,5 +43,11 @@ public class UserDAO {
 			c.close();
 			
 			return user;
+		}
+		
+		private Connection getConnection() throws ClassNotFoundException, SQLException{
+			Class.forName("com.mysql.jdbc.Driver"); //DB Driver Load
+			Connection c = DriverManager.getConnection("jdbc:mysql://localhost/spring_db","dohyun","1234");
+			return c;
 		}
 }

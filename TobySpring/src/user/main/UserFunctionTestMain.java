@@ -2,8 +2,9 @@ package user.main;
 
 import java.sql.SQLException;
 
-import user.dao.ConnectionMaker;
-import user.dao.DConnectionMaker;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import user.dao.DaoFactory;
 import user.dao.UserDAO;
 import user.domain.User;
@@ -13,8 +14,9 @@ public class UserFunctionTestMain {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		
+		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 		
-		UserDAO dao = new DaoFactory().userDAO();
+		UserDAO dao = context.getBean("userDAO",UserDAO.class);
 		
 		User user = new User();
 		user.setId("dohyun");

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 import user.dao.DAOFactory;
 import user.dao.UserDAO;
@@ -14,8 +15,8 @@ public class UserFunctionTestMain {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		
-		//Using DI
-		ApplicationContext context = new AnnotationConfigApplicationContext(DAOFactory.class);
+		//Using XML for DI
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 
 		
 		UserDAO dao = context.getBean("userDAO",UserDAO.class);

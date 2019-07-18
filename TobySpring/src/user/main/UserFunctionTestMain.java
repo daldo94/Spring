@@ -15,8 +15,12 @@ public class UserFunctionTestMain {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		
+        //Using Java Bean for DI
+        //ApplicationContext context = new AnnotationConfigApplicationContext(DAOFactory.class);
+		
+		
 		//Using XML for DI
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 
 		
 		UserDAO dao = context.getBean("userDAO",UserDAO.class);

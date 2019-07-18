@@ -1,23 +1,24 @@
 package user.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.sql.DataSource;
 
 import user.domain.User;
 
 public class UserDAO {
 		
-		private ConnectionMaker connectionMaker;
+		private DataSource dataSource;
 
-		public void setConnectionMaker(ConnectionMaker connectionMaker) {
-			this.connectionMaker = connectionMaker;
+		public void setDataSource(DataSource dataSource) {
+			this.dataSource = dataSource;
 		}
 
-		public void add(User user) throws ClassNotFoundException, SQLException{
-			Connection c = connectionMaker.makeConnection();
+		public void add(User user) throws SQLException{
+			Connection c = dataSource.getConnection();
 			
 			PreparedStatement ps = c.prepareStatement("INSERT INTO USERS(ID, NAME, PASSWORD) VALUES(?,?,?)");
 			ps.setString(1, user.getId());
@@ -30,8 +31,8 @@ public class UserDAO {
 			c.close();
 		}
 		
-		public User get(String id) throws ClassNotFoundException, SQLException{
-			Connection c = connectionMaker.makeConnection();
+		public User get(String id) throws SQLException{
+			Connection c = dataSource.getConnection();
 			
 			PreparedStatement ps = c.prepareStatement("SELECT * FROM USERS WHERE ID = ?");
 			ps.setString(1, id);

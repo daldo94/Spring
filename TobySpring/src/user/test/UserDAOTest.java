@@ -1,20 +1,21 @@
-package user.main;
+package user.test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 
+import org.junit.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-import user.dao.DAOFactory;
 import user.dao.UserDAO;
 import user.domain.User;
 
-public class UserFunctionTestMain {
+public class UserDAOTest {
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		
+	@Test
+	public void addAndGet() throws SQLException {
         //Using Java Bean for DI
         //ApplicationContext context = new AnnotationConfigApplicationContext(DAOFactory.class);
 		
@@ -32,18 +33,12 @@ public class UserFunctionTestMain {
 		
 		dao.add(user);
 		
-		System.out.println(user.getId() + " 등록 성공");
-		
 		
 		User user2 = dao.get(user.getId());
 		
-		if(!user.getName().equals(user2.getName())) {
-			System.out.println("테스트 실패 (name)");
-		}else if(!user.getPassword().equals(user2.getPassword())) {
-			System.out.println("테스트 실패 (password)");
-		}else {
-			System.out.println(user2.getId() + " 조회 성공");
-		}
+		assertThat(user2.getName(), is(user.getName()));
+		assertThat(user2.getPassword(), is(user.getPassword()));
+		
 		
 	}
 

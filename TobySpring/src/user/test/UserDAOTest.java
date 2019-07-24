@@ -7,27 +7,29 @@ import java.sql.SQLException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import user.dao.UserDAO;
 import user.domain.User;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "/applicationContext.xml")
 public class UserDAOTest {
+	//@Autowired
+	//private ApplicationContext context;
+	@Autowired
 	private UserDAO dao;
 	private User user1;
 	private User user2;
 	private User user3;
 	
 	@Before
-	public void setUp() {
-        //Using Java Bean for DI
-        //ApplicationContext context = new AnnotationConfigApplicationContext(DAOFactory.class);
-		
-		//Using XML for DI
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		this.dao = context.getBean("userDAO",UserDAO.class);
+	public void setUp() {	
+		//this.dao = context.getBean("userDAO",UserDAO.class);
 		 
 		this.user1 = new User("dohyun1","±èµµÇö","1234");
 		this.user2 = new User("dohyun2","±èµµÇö","1234");
@@ -53,7 +55,6 @@ public class UserDAOTest {
 		assertThat(userGet2.getName(), is(user2.getName()));
 		assertThat(userGet2.getPassword(), is(user2.getPassword()));
 		
-		
 	}
 	
 	@Test
@@ -71,7 +72,6 @@ public class UserDAOTest {
 		dao.add(user3);
 		assertThat(dao.getCount(),is(3));
 		
-		
 	}
 	
 	@Test(expected = EmptyResultDataAccessException.class)
@@ -79,8 +79,9 @@ public class UserDAOTest {
 
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
-		
+
 		dao.get("unknown_id");
+		
 	}
 
 }

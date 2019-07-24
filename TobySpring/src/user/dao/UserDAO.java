@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import user.domain.User;
 
 public class UserDAO {
@@ -38,18 +40,49 @@ public class UserDAO {
 			ps.setString(1, id);
 			
 			ResultSet rs = ps.executeQuery();
-			rs.next(); //rs가 처음에 null을 가르키기 때문에
 			
-			User user = new User();
-			user.setId(rs.getString("ID"));
-			user.setName(rs.getString("NAME"));
-			user.setPassword(rs.getString("PASSWORD"));
+			
+			User user = null;
+			if(rs.next()) {
+				user = new User();
+				user.setId(rs.getString("ID"));
+				user.setName(rs.getString("NAME"));
+				user.setPassword(rs.getString("PASSWORD"));
+			}
+
 			
 			rs.close();
 			ps.close();
 			c.close();
 			
+			if(user==null) throw new EmptyResultDataAccessException(1);
+			
 			return user;
 		}
 		
+		public void deleteAll() throws SQLException{
+			Connection c = dataSource.getConnection();
+			
+			PreparedStatement ps = c.prepareStatement("DELETE FROM USERS");
+			ps.executeUpdate();
+			
+			ps.close();
+			c.close();
+		}
+		
+		public int getCount() throws SQLException{
+			Connection c = dataSource.getConnection();
+			
+			PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM USERS");
+			
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			int count = rs.getInt(1);
+			
+			rs.close();
+			ps.close();
+			c.close();
+			
+			return count;
+		}
 }

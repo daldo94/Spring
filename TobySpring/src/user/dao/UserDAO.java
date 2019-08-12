@@ -66,14 +66,7 @@ public class UserDAO {
 		}
 		
 		public void deleteAll() throws SQLException{
-			this.jdbcContext.workWithStatementStrategy(
-					 new StatementStrategy() {	
-						@Override
-						public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-							// TODO Auto-generated method stub
-							return c.prepareStatement("DELETE FROM USERS");
-						}
-					});
+			executeSql("DELETE FROM USERS");
 		}
 		
 		public int getCount() throws SQLException{
@@ -113,5 +106,16 @@ public class UserDAO {
 					}
 				}
 			}
+		}
+		
+		private void executeSql(final String query) throws SQLException{
+			this.jdbcContext.workWithStatementStrategy(
+					 new StatementStrategy() {	
+						@Override
+						public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+							// TODO Auto-generated method stub
+							return c.prepareStatement(query);
+						}
+					});
 		}
 }

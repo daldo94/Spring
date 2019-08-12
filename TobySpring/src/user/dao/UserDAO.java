@@ -20,21 +20,18 @@ public class UserDAO {
 		}
 
 		public void add(final User user) throws SQLException{
-			class AddStatement implements StatementStrategy{
-				@Override
-				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-					// TODO Auto-generated method stub
-					PreparedStatement ps = c.prepareStatement("INSERT INTO USERS(ID, NAME, PASSWORD) VALUES(?,?,?)");
-					ps.setString(1, user.getId());
-					ps.setString(2, user.getName());
-					ps.setString(3, user.getPassword());
-					return ps;
-				}
-				
-			}
-			
-			StatementStrategy st = new AddStatement();
-			jdbcContextWithStatementStrategy(st);
+			jdbcContextWithStatementStrategy(
+					new StatementStrategy() {				
+						@Override
+						public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+							// TODO Auto-generated method stub
+							PreparedStatement ps = c.prepareStatement("INSERT INTO USERS(ID, NAME, PASSWORD) VALUES(?,?,?)");
+							ps.setString(1, user.getId());
+							ps.setString(2, user.getName());
+							ps.setString(3, user.getPassword());
+							return ps;
+						}
+					});
 			
 		}
 		
@@ -66,8 +63,14 @@ public class UserDAO {
 		}
 		
 		public void deleteAll() throws SQLException{
-			StatementStrategy st = new DeleteAllStatement();
-			jdbcContextWithStatementStrategy(st);
+			jdbcContextWithStatementStrategy(
+					 new StatementStrategy() {	
+						@Override
+						public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+							// TODO Auto-generated method stub
+							return c.prepareStatement("DELETE FROM USERS");
+						}
+					});
 		}
 		
 		public int getCount() throws SQLException{

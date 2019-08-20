@@ -14,11 +14,21 @@ import user.domain.User;
 public class UserDAO {
 		
 		private JdbcTemplate jdbcTemplate;
-		private DataSource dataSource;
+		private RowMapper<User> userMapper = new RowMapper<User>() {
+			@Override
+			public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+				// TODO Auto-generated method stub
+				User user = new User();
+				user.setId(rs.getString("ID"));
+				user.setName(rs.getString("NAME"));
+				user.setPassword(rs.getString("PASSWORD"));
+				return user;
+			}
+		};
+				
 
 		public void setDataSource(DataSource dataSource) {
 			this.jdbcTemplate = new JdbcTemplate(dataSource);
-			this.dataSource = dataSource;
 		}
 
 		public void add(final User user) throws SQLException{
@@ -28,33 +38,12 @@ public class UserDAO {
 		public User get(String id) throws SQLException{
 			return this.jdbcTemplate.queryForObject("SELECT * FROM USERS WHERE ID = ?", 
 					new Object[] {id}, 
-					new RowMapper<User>() {
-						@Override
-						public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-							// TODO Auto-generated method stub
-							User user = new User();
-							user.setId(rs.getString("ID"));
-							user.setName(rs.getString("NAME"));
-							user.setPassword(rs.getString("PASSWORD"));
-							return user;
-						}
-					
-			});
+					this.userMapper);
 		}
 		
 		public List<User> getAll(){
 			return this.jdbcTemplate.query("SELECT * FROM USERS ORDER BY ID", 
-					new RowMapper<User>() {
-						@Override
-						public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-							// TODO Auto-generated method stub
-							User user = new User();
-							user.setId(rs.getString("ID"));
-							user.setName(rs.getString("NAME"));
-							user.setPassword(rs.getString("PASSWORD"));
-							return user;
-						}
-			});
+					this.userMapper);
 		}
 		
 		public void deleteAll() throws SQLException{

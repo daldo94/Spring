@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import user.dao.UserDAOJdbc;
+import user.domain.Level;
 import user.domain.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,9 +34,9 @@ public class UserDAOTest {
 	public void setUp() {	
 		//this.dao = context.getBean("userDAO",UserDAO.class);
 		
-		this.user1 = new User("dohyun1","±èµµÇö","1234");
-		this.user2 = new User("dohyun2","±èµµÇö","1234");
-		this.user3 = new User("dohyun3","±èµµÇö","1234");
+		this.user1 = new User("dohyun1","±èµµÇö","1234", Level.BASIC, 1, 0);
+		this.user2 = new User("dohyun2","±èµµÇö","1234", Level.SILVER, 55, 10);
+		this.user3 = new User("dohyun3","±èµµÇö","1234", Level.GOLD, 100, 40);
 	}
 
 	@Test
@@ -50,12 +51,10 @@ public class UserDAOTest {
 		assertThat(dao.getCount(), is(2));
 		
 		User userGet1 = dao.get(user1.getId());
-		assertThat(userGet1.getName(), is(user1.getName()));
-		assertThat(userGet1.getPassword(), is(user1.getPassword()));
+		checkSameUser(userGet1, user1);
 		
 		User userGet2 = dao.get(user2.getId());
-		assertThat(userGet2.getName(), is(user2.getName()));
-		assertThat(userGet2.getPassword(), is(user2.getPassword()));
+		checkSameUser(userGet2, user2);
 		
 	}
 	
@@ -119,6 +118,9 @@ public class UserDAOTest {
 		assertThat(user1.getId(), is(user2.getId()));
 		assertThat(user1.getName(), is(user2.getName()));
 		assertThat(user1.getPassword(), is(user2.getPassword()));
+		assertThat(user1.getLevel(), is(user2.getLevel()));
+		assertThat(user1.getLogin(), is(user2.getLogin()));
+		assertThat(user1.getRecommend(), is(user2.getRecommend()));
 	}
 	
 	@Test(expected = DataAccessException.class)
@@ -128,6 +130,27 @@ public class UserDAOTest {
 		
 		dao.add(user1);
 		dao.add(user1);
+	}
+	
+	@Test
+	public void update() {
+		dao.deleteAll();
+		
+		dao.add(user1);
+		dao.add(user2);
+		
+		user1.setName("±èµµÇö4");
+		user1.setPassword("1234");
+		user1.setLevel(Level.GOLD);
+		user1.setLogin(1000);
+		user1.setRecommend(999);
+		dao.update(user1);
+		
+		User user1Update = dao.get(user1.getId());
+		checkSameUser(user1, user1Update);
+		
+		User user2Same = dao.get(user2.getId());
+		checkSameUser(user2, user2Same);
 	}
 
 }

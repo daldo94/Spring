@@ -10,6 +10,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import user.domain.Level;
 import user.domain.User;
 
 public class UserDAOJdbc implements UserDAO {
@@ -23,6 +24,9 @@ public class UserDAOJdbc implements UserDAO {
 				user.setId(rs.getString("ID"));
 				user.setName(rs.getString("NAME"));
 				user.setPassword(rs.getString("PASSWORD"));
+				user.setLevel(Level.valueOf(rs.getInt("LEVEL")));
+				user.setLogin(rs.getInt("LOGIN"));
+				user.setRecommend(rs.getInt("RECOMMEND"));
 				return user;
 			}
 		};
@@ -35,7 +39,8 @@ public class UserDAOJdbc implements UserDAO {
 		@Override
 		public void add(final User user) {
 			// TODO Auto-generated method stub
-			this.jdbcTemplate.update("INSERT INTO USERS(ID, NAME, PASSWORD) VALUES(?,?,?)", user.getId(),user.getName(),user.getPassword());
+			this.jdbcTemplate.update("INSERT INTO USERS(ID, NAME, PASSWORD, LEVEL, LOGIN, RECOMMEND) VALUES(?,?,?,?,?,?)", 
+					user.getId(),user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend());
 		}
 		
 		@Override
@@ -63,6 +68,13 @@ public class UserDAOJdbc implements UserDAO {
 		public int getCount() {
 			// TODO Auto-generated method stub
 			return this.jdbcTemplate.queryForObject("SELECT COUNT(*) FROM USERS", Integer.class); 
+		}
+
+		@Override
+		public void update(User user) {
+			// TODO Auto-generated method stub
+			this.jdbcTemplate.update("UPDATE USERS SET NAME = ?, PASSWORD = ?, LEVEL = ?, LOGIN = ?, RECOMMEND = ? WHERE ID = ?",
+					user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getId());
 		}
 		
 }

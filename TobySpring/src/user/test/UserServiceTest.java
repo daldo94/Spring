@@ -18,6 +18,8 @@ import user.dao.UserDAO;
 import user.domain.Level;
 import user.domain.User;
 import user.service.UserService;
+import static user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
+import static user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations =  "/applicationContext.xml")
@@ -31,11 +33,11 @@ public class UserServiceTest {
 	@Before
 	public void setUp() {
 		users = Arrays.asList(
-				new User("dohyun1","±èµµÇö1","1234", Level.BASIC, 49, 0),
-				new User("dohyun2","±èµµÇö2","1234", Level.BASIC, 50, 0),
-				new User("dohyun3","±èµµÇö3","1234", Level.SILVER, 60, 29),
-				new User("dohyun4","±èµµÇö4","1234", Level.SILVER, 60, 30),
-				new User("dohyun5","±èµµÇö5","1234", Level.GOLD, 100, 100)
+				new User("dohyun1","±èµµÇö1","1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0),
+				new User("dohyun2","±èµµÇö2","1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0),
+				new User("dohyun3","±èµµÇö3","1234", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD-1),
+				new User("dohyun4","±èµµÇö4","1234", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD),
+				new User("dohyun5","±èµµÇö5","1234", Level.GOLD, 100, Integer.MAX_VALUE)
 		);
 	}
 	
@@ -55,16 +57,21 @@ public class UserServiceTest {
 		userService.upgradeLevels();
 		
 		
-		checkLevel(users.get(0), Level.BASIC);
-		checkLevel(users.get(1), Level.SILVER);
-		checkLevel(users.get(2), Level.SILVER);
-		checkLevel(users.get(3), Level.GOLD);
-		checkLevel(users.get(4), Level.GOLD);
+		checkLevelUpgraded(users.get(0), false);
+		checkLevelUpgraded(users.get(1), true);
+		checkLevelUpgraded(users.get(2), false);
+		checkLevelUpgraded(users.get(3), true);
+		checkLevelUpgraded(users.get(4), false);
 	}
 	
-	private void checkLevel(User user, Level expectedLevel) {
+	private void checkLevelUpgraded(User user, boolean upgraded) {
 		User userUpdate = userDAO.get(user.getId());
-		assertThat(userUpdate.getLevel(),is(expectedLevel));
+		if(upgraded) {
+			assertThat(userUpdate.getLevel(),is(user.getLevel().nextLevel()));
+		}
+		else {
+			assertThat(userUpdate.getLevel(),is(user.getLevel()));
+		}
 	}
 	
 	@Test

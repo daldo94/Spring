@@ -15,7 +15,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import user.dao.UserDAOJdbc;
+import user.dao.UserDAO;
 import user.domain.Level;
 import user.domain.User;
 
@@ -25,7 +25,7 @@ public class UserDAOTest {
 	//@Autowired
 	//private ApplicationContext context;
 	@Autowired
-	private UserDAOJdbc dao;
+	private UserDAO dao;
 	private User user1;
 	private User user2;
 	private User user3;
@@ -34,9 +34,9 @@ public class UserDAOTest {
 	public void setUp() {	
 		//this.dao = context.getBean("userDAO",UserDAO.class);
 		
-		this.user1 = new User("dohyun1","±èµµÇö","1234", Level.BASIC, 1, 0);
-		this.user2 = new User("dohyun2","±èµµÇö","1234", Level.SILVER, 55, 10);
-		this.user3 = new User("dohyun3","±èµµÇö","1234", Level.GOLD, 100, 40);
+		this.user1 = new User("dohyun1","±èµµÇö1","1234", Level.BASIC, 1, 0);
+		this.user2 = new User("dohyun2","±èµµÇö2","1234", Level.SILVER, 55, 10);
+		this.user3 = new User("dohyun3","±èµµÇö3","1234", Level.GOLD, 100, 40);
 	}
 
 	@Test

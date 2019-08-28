@@ -18,6 +18,7 @@
 	
 	<bean id="userServcie" class="user.service.UserService">
 		<property name="userDAO" ref="userDAO"></property>
+		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
 </beans>

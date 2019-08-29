@@ -10,12 +10,11 @@ import static user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -34,6 +33,8 @@ public class UserServiceTest {
 	private UserDAO userDAO;
 	@Autowired
 	PlatformTransactionManager transactionManager;
+	@Autowired
+	MailSender mailSender;
 	
 	List<User> users;
 	
@@ -105,6 +106,7 @@ public class UserServiceTest {
 		UserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDAO(this.userDAO);
 		testUserService.setTransactionManager(transactionManager);
+		testUserService.setMailSender(mailSender);
 		
 		userDAO.deleteAll();
 		for(User user : users) userDAO.add(user);

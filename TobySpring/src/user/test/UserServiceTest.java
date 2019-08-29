@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import static user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
 import static user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +15,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailMessage;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -55,12 +60,16 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	@DirtiesContext
 	public void upgradeLevels() throws Exception {
 		
 		userDAO.deleteAll();
 		for(User user : users) {
 			userDAO.add(user);
 		}
+		
+		MockMailSender mockMailSender = new MockMailSender();
+		userService.setMailSender(mockMailSender);
 		
 		userService.upgradeLevels();
 		
@@ -70,6 +79,11 @@ public class UserServiceTest {
 		checkLevelUpgraded(users.get(2), false);
 		checkLevelUpgraded(users.get(3), true);
 		checkLevelUpgraded(users.get(4), false);
+		
+		List<String> request = mockMailSender.getRequest();
+		assertThat(request.size(), is(2));
+		assertThat(request.get(0), is(users.get(0).getEmail()));
+		assertThat(request.get(1), is(users.get(1).getEmail()));
 	}
 	
 	private void checkLevelUpgraded(User user, boolean upgraded) {
@@ -138,6 +152,27 @@ public class UserServiceTest {
 	}
 	
 	static class TestUserServiceException extends RuntimeException{
+		
+	}
+	
+	static class MockMailSender implements MailSender{
+		private List<String> requests = new ArrayList<String>();
+		
+		
+		public List<String> getRequest(){
+			return requests;
+		}
+		@Override
+		public void send(SimpleMailMessage mailMessage) throws MailException {
+			// TODO Auto-generated method stub
+			requests.add(mailMessage.getTo()[0]);
+		}
+
+		@Override
+		public void send(SimpleMailMessage[] mailMessage) throws MailException {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 }

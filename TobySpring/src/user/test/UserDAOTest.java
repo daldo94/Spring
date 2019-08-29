@@ -34,9 +34,9 @@ public class UserDAOTest {
 	public void setUp() {	
 		//this.dao = context.getBean("userDAO",UserDAO.class);
 		
-		this.user1 = new User("dohyun1","±èµµÇö1","1234", Level.BASIC, 1, 0);
-		this.user2 = new User("dohyun2","±èµµÇö2","1234", Level.SILVER, 55, 10);
-		this.user3 = new User("dohyun3","±èµµÇö3","1234", Level.GOLD, 100, 40);
+		this.user1 = new User("dohyun1","±èµµÇö1","1234", Level.BASIC, 1, 0, "kimdohyunlll@naver.com");
+		this.user2 = new User("dohyun2","±èµµÇö2","1234", Level.SILVER, 55, 10, "kimdohyunlll@naver.com");
+		this.user3 = new User("dohyun3","±èµµÇö3","1234", Level.GOLD, 100, 40, "kimdohyunlll@naver.com");
 	}
 
 	@Test

@@ -4,8 +4,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
-import static user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
+import static user.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
+import static user.service.UserServiceImpl.MIN_RECCOMEND_FOR_GOLD;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailMessage;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
@@ -28,12 +27,16 @@ import user.dao.UserDAO;
 import user.domain.Level;
 import user.domain.User;
 import user.service.UserService;
+import user.service.UserServiceImpl;
+import user.service.UserServiceTx;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations =  "/applicationContext.xml")
 public class UserServiceTest {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private UserDAO userDAO;
 	@Autowired
@@ -69,7 +72,7 @@ public class UserServiceTest {
 		}
 		
 		MockMailSender mockMailSender = new MockMailSender();
-		userService.setMailSender(mockMailSender);
+		userServiceImpl.setMailSender(mockMailSender);
 		
 		userService.upgradeLevels();
 		
@@ -117,16 +120,19 @@ public class UserServiceTest {
 	
 	@Test
 	public void upgradeAllOrNothing() throws Exception {
-		UserService testUserService = new TestUserService(users.get(3).getId());
+		TestUserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDAO(this.userDAO);
-		testUserService.setTransactionManager(transactionManager);
 		testUserService.setMailSender(mailSender);
+		
+		UserServiceTx txUserService = new UserServiceTx();
+		txUserService.setTransactionManager(transactionManager);
+		txUserService.setUserService(testUserService);
 		
 		userDAO.deleteAll();
 		for(User user : users) userDAO.add(user);
 		
 		try {
-			testUserService.upgradeLevels();
+			txUserService.upgradeLevels();
 			fail("TestUserServiceException expected");
 		}catch(TestUserServiceException e) {
 			
@@ -136,7 +142,7 @@ public class UserServiceTest {
 	}
 	
 	
-	static class TestUserService extends UserService{
+	static class TestUserService extends UserServiceImpl{
 		private String id;
 		
 		private TestUserService(String id) {

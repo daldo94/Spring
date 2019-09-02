@@ -35,8 +35,8 @@ import user.service.UserServiceTx;
 public class UserServiceTest {
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private UserServiceImpl userServiceImpl;
+	//@Autowired
+	//private UserServiceImpl userServiceImpl;
 	@Autowired
 	private UserDAO userDAO;
 	@Autowired
@@ -63,30 +63,33 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@DirtiesContext
 	public void upgradeLevels() throws Exception {
 		
-		userDAO.deleteAll();
-		for(User user : users) {
-			userDAO.add(user);
-		}
+		UserServiceImpl userServiceImpl = new UserServiceImpl();
+		
+		MockUserDAO mockUserDAO = new MockUserDAO(this.users);
+		userServiceImpl.setUserDAO(mockUserDAO);
 		
 		MockMailSender mockMailSender = new MockMailSender();
 		userServiceImpl.setMailSender(mockMailSender);
 		
-		userService.upgradeLevels();
+		userServiceImpl.upgradeLevels();
 		
-		
-		checkLevelUpgraded(users.get(0), false);
-		checkLevelUpgraded(users.get(1), true);
-		checkLevelUpgraded(users.get(2), false);
-		checkLevelUpgraded(users.get(3), true);
-		checkLevelUpgraded(users.get(4), false);
+		List<User> updated = mockUserDAO.getUpdated();
+		assertThat(updated.size(), is(2));
+		checkUserAndLevel(updated.get(0), "dohyun2", Level.SILVER);
+		checkUserAndLevel(updated.get(1), "dohyun4", Level.GOLD);
+
 		
 		List<String> request = mockMailSender.getRequest();
 		assertThat(request.size(), is(2));
 		assertThat(request.get(0), is(users.get(0).getEmail()));
 		assertThat(request.get(1), is(users.get(1).getEmail()));
+	}
+	
+	private void checkUserAndLevel(User updated, String expectedId, Level expectedLevel) {
+		assertThat(updated.getId(), is(expectedId));
+		assertThat(updated.getLevel(), is(expectedLevel));
 	}
 	
 	private void checkLevelUpgraded(User user, boolean upgraded) {
@@ -179,6 +182,59 @@ public class UserServiceTest {
 			// TODO Auto-generated method stub
 			
 		}
+		
+	}
+	
+	static class MockUserDAO implements UserDAO{
+		private List<User> users;
+		private List<User> updated = new ArrayList();
+		
+		private MockUserDAO(List<User> users) {
+			// TODO Auto-generated constructor stub
+			this.users = users;
+		}
+		
+		public List<User> getUpdated(){
+			return this.updated;
+		}
+		
+		@Override
+		public List<User> getAll() {
+			// TODO Auto-generated method stub
+			return this.users;
+		}
+		
+		@Override
+		public void update(User user) {
+			// TODO Auto-generated method stub
+			updated.add(user);
+		}
+		
+		@Override
+		public void add(User user) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public User get(String id) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void deleteAll() {
+			throw new UnsupportedOperationException();
+			
+		}
+
+		@Override
+		public int getCount() {
+			throw new UnsupportedOperationException();
+		}
+
+
+		
 		
 	}
 }

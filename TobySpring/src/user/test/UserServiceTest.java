@@ -4,10 +4,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static user.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
 import static user.service.UserServiceImpl.MIN_RECCOMEND_FOR_GOLD;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,9 +32,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import user.dao.UserDAO;
 import user.domain.Level;
 import user.domain.User;
+import user.service.TransactionHandler;
 import user.service.UserService;
 import user.service.UserServiceImpl;
-import user.service.UserServiceTx;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations =  "/applicationContext.xml")
@@ -149,14 +154,20 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void upgradeAllOrNothing() throws Exception {
+	public void upgradeAllOrNothing() throws Exception {		
 		TestUserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDAO(this.userDAO);
 		testUserService.setMailSender(mailSender);
 		
-		UserServiceTx txUserService = new UserServiceTx();
-		txUserService.setTransactionManager(transactionManager);
-		txUserService.setUserService(testUserService);
+		TransactionHandler txHandler = new TransactionHandler();
+		txHandler.setTarget(testUserService);
+		txHandler.setTransactionManager(transactionManager);
+		txHandler.setPattern("upgradeLevels");
+		
+		UserService txUserService = (UserService)Proxy.newProxyInstance(
+				getClass().getClassLoader(),
+				new Class[] {UserService.class},
+				txHandler);
 		
 		userDAO.deleteAll();
 		for(User user : users) userDAO.add(user);

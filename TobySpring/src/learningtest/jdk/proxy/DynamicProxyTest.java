@@ -72,6 +72,5 @@ public class DynamicProxyTest {
 		assertThat(proxiedHello.sayHi("Toby"), is("HI TOBY"));
 		assertThat(proxiedHello.sayThankyou("Toby"), is("Thank you Toby"));
 		
-		
 	}
 }

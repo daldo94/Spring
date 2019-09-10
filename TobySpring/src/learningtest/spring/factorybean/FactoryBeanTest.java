@@ -1,7 +1,9 @@
 package learningtest.spring.factorybean;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
+
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +25,9 @@ public class FactoryBeanTest {
 		assertThat(((Message)message).getText(), is("Factory Bean"));
 	}
 	
-//	@Test
-//	public void getFactoryBean() {
-//		Object factory = context.getBean("&message");
-//		assertThat(factory,is(MessageFactoryBean.class));
-//	}
+	@Test
+	public void getFactoryBean() {
+		Object factory = context.getBean("&message");
+		assertThat(factory,instanceOf(MessageFactoryBean.class));
+	}
 }

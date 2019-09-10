@@ -23,7 +23,7 @@
 		<property name="serviceInterface" value="user.service.UserService"></property>
 	</bean>-->
 	
-	<bean id="userServiceImpl" class="user.service.UserServiceImpl">
+	<bean id="userService" class="user.service.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"></property>
 		<property name="mailSender" ref="mailSender"></property>
 	</bean>
@@ -38,11 +38,15 @@
 		<property name="host" value="mail.server.com"></property>
 	</bean>-->
 	
+	<bean class = "org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+	</bean>
+	
 	<bean id="transactionAdvice" class="user.service.TransactionAdvice">
 		<property name="transactionManager" ref="transactionManager"></property>
 	</bean>
 	
-	<bean id="transactionPointcut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+	<bean id="transactionPointcut" class="user.service.NameMatchClassMethodPointcut">
+		<property name="mappedClassName" value="*ServiceImpl"></property>
 		<property name="mappedName" value="upgrade*"></property>
 	</bean>
 	
@@ -51,12 +55,6 @@
 		<property name="pointcut" ref="transactionPointcut"></property>
 	</bean>
 	
-	<bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean">
-		<property name="target" ref="userServiceImpl"></property>
-		<property name="interceptorNames">
-			<list>
-				<value>transactionAdvisor</value>
-			</list>
-		</property>
+	<bean id="testUserService" class="user.test.UserServiceTest$TestUserServiceImpl" parent="userService">
 	</bean>
 </beans>

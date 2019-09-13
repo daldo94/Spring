@@ -44,24 +44,26 @@
 		<property name="host" value="mail.server.com"></property>
 	</bean>-->
 	
-	<bean class = "org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+	<!--  <bean class = "org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
 	</bean>
-	
+	-->
 <!--<bean id="transactionAdvice" class="user.service.TransactionAdvice">
 		<property name="transactionManager" ref="transactionManager"></property>
 	</bean>-->
-	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
+	<!--  <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+	    <tx:attributes>
 			<tx:method name="get*" read-only="true"/>
 			<tx:method name="*"/>
-		</tx:attributes>
-	</tx:advice>
+		</tx:attributes> 
+	</tx:advice>-->
 	
 	
-	<aop:config>
+	<!--  <aop:config>
 		<aop:advisor advice-ref="transactionAdvice" pointcut="bean(*Service)"/>
 	</aop:config>
-	
-	<bean id="testUserService" class="user.test.UserServiceTest$TestUserServiceImpl" parent="userService">
+	-->
+	<bean id="testUserService" class="user.test.UserServiceTest$TestUserService" parent="userService">
 	</bean>
+	
+	<tx:annotation-driven/>
 </beans>

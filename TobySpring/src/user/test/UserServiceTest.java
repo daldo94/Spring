@@ -186,19 +186,11 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void transactionSync() {
-		DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
-		TransactionStatus txStatus = transactionManager.getTransaction(txDefinition);
-		
-		try {
 			userService.deleteAll();
 			userService.add(users.get(0));
 			userService.add(users.get(1));
-		}
-		finally {
-			transactionManager.rollback(txStatus);
-		}
-
 	}
 	
 	

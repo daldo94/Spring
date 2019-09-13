@@ -60,7 +60,7 @@
 	
 	
 	<aop:config>
-		<aop:advisor advice-ref="transactionAdvice" pointcut="execution(* *..*ServiceImpl.upgrade*(..))"/>
+		<aop:advisor advice-ref="transactionAdvice" pointcut="execution(* *..*ServiceImpl.*(..))"/>
 	</aop:config>
 	
 	<bean id="testUserService" class="user.test.UserServiceTest$TestUserServiceImpl" parent="userService">

@@ -30,6 +30,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,7 @@ import user.service.UserServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations =  "/applicationContext.xml")
+@TransactionConfiguration(defaultRollback = false)
 public class UserServiceTest {
 	@Autowired
 	ApplicationContext context;
@@ -187,7 +189,6 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Transactional
 	@Rollback(false)
 	public void transactionSync() {
 			userService.deleteAll();

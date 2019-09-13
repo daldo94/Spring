@@ -30,6 +30,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import user.dao.UserDAO;
 import user.domain.Level;
@@ -181,6 +184,23 @@ public class UserServiceTest {
 	public void readOnlyTransactionAttribute() {
 		testUserService.getAll();
 	}
+	
+	@Test
+	public void transactionSync() {
+		DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
+		TransactionStatus txStatus = transactionManager.getTransaction(txDefinition);
+		
+		try {
+			userService.deleteAll();
+			userService.add(users.get(0));
+			userService.add(users.get(1));
+		}
+		finally {
+			transactionManager.rollback(txStatus);
+		}
+
+	}
+	
 	
 	static class TestUserService extends UserServiceImpl{
 		private String id = "dohyun4";

@@ -67,4 +67,24 @@ public class UserServiceImpl implements UserService {
 		if(user.getLevel() == null) user.setLevel(Level.BASIC);
 		userDAO.add(user);
 	}
+	@Override
+	public User get(String id) {
+		// TODO Auto-generated method stub
+		return userDAO.get(id);
+	}
+	@Override
+	public List<User> getAll() {
+		// TODO Auto-generated method stub
+		return userDAO.getAll();
+	}
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		userDAO.deleteAll();
+	}
+	@Override
+	public void update(User user) {
+		// TODO Auto-generated method stub
+		userDAO.update(user);
+	}
 }

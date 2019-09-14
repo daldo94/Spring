@@ -31,16 +31,28 @@ public class UserDAOJdbc implements UserDAO {
 				return user;
 			}
 		};
+		private String sqlAdd;
 				
 
 		public void setDataSource(DataSource dataSource) {
 			this.jdbcTemplate = new JdbcTemplate(dataSource);
 		}
-
+		
+		public void setSqlAdd(String sqlAdd) {
+			this.sqlAdd = sqlAdd;
+		}
+/*
 		@Override
 		public void add(final User user) {
 			// TODO Auto-generated method stub
 			this.jdbcTemplate.update("INSERT INTO USERS(ID, NAME, PASSWORD, LEVEL, LOGIN, RECOMMEND, EMAIL) VALUES(?,?,?,?,?,?,?)", 
+					user.getId(),user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
+		}*/
+		
+		@Override
+		public void add(final User user) {
+			// TODO Auto-generated method stub
+			this.jdbcTemplate.update(this.sqlAdd, 
 					user.getId(),user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
 		}
 		

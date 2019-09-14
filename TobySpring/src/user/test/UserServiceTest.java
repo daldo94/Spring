@@ -44,7 +44,6 @@ import user.service.UserServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations =  "/applicationContext.xml")
-@TransactionConfiguration(defaultRollback = false)
 public class UserServiceTest {
 	@Autowired
 	ApplicationContext context;
@@ -189,6 +188,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	@Rollback(false)
 	public void transactionSync() {
 			userService.deleteAll();

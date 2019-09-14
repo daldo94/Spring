@@ -3,10 +3,10 @@ package user.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -31,35 +31,28 @@ public class UserDAOJdbc implements UserDAO {
 				return user;
 			}
 		};
-		private String sqlAdd;
+		private Map<String, String> sqlMap;
 				
 
 		public void setDataSource(DataSource dataSource) {
 			this.jdbcTemplate = new JdbcTemplate(dataSource);
 		}
 		
-		public void setSqlAdd(String sqlAdd) {
-			this.sqlAdd = sqlAdd;
+		public void setSqlMap(Map<String,String> sqlMap) {
+			this.sqlMap = sqlMap;
 		}
-/*
+
 		@Override
 		public void add(final User user) {
 			// TODO Auto-generated method stub
-			this.jdbcTemplate.update("INSERT INTO USERS(ID, NAME, PASSWORD, LEVEL, LOGIN, RECOMMEND, EMAIL) VALUES(?,?,?,?,?,?,?)", 
-					user.getId(),user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
-		}*/
-		
-		@Override
-		public void add(final User user) {
-			// TODO Auto-generated method stub
-			this.jdbcTemplate.update(this.sqlAdd, 
+			this.jdbcTemplate.update(this.sqlMap.get("add"), 
 					user.getId(),user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
 		}
 		
 		@Override
 		public User get(String id) {
 			// TODO Auto-generated method stub
-			return this.jdbcTemplate.queryForObject("SELECT * FROM USERS WHERE ID = ?", 
+			return this.jdbcTemplate.queryForObject(this.sqlMap.get("get"), 
 					new Object[] {id}, 
 					this.userMapper);
 		}
@@ -67,26 +60,26 @@ public class UserDAOJdbc implements UserDAO {
 		@Override
 		public List<User> getAll(){
 			// TODO Auto-generated method stub
-			return this.jdbcTemplate.query("SELECT * FROM USERS ORDER BY ID", 
+			return this.jdbcTemplate.query(this.sqlMap.get("getAll"), 
 					this.userMapper);
 		}
 		
 		@Override
 		public void deleteAll() {
 			// TODO Auto-generated method stub
-			this.jdbcTemplate.update("DELETE FROM USERS");
+			this.jdbcTemplate.update(this.sqlMap.get("deleteAll"));
 		}
 		
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return this.jdbcTemplate.queryForObject("SELECT COUNT(*) FROM USERS", Integer.class); 
+			return this.jdbcTemplate.queryForObject(this.sqlMap.get("getCount"), Integer.class); 
 		}
 
 		@Override
 		public void update(User user) {
 			// TODO Auto-generated method stub
-			this.jdbcTemplate.update("UPDATE USERS SET NAME = ?, PASSWORD = ?, LEVEL = ?, LOGIN = ?, RECOMMEND = ?, EMAIL = ? WHERE ID = ?",
+			this.jdbcTemplate.update(this.sqlMap.get("update"),
 					user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail(), user.getId());
 		}
 		

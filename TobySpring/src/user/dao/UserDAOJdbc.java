@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import user.domain.Level;
 import user.domain.User;
+import user.sqlservice.SqlService;
 
 public class UserDAOJdbc implements UserDAO {
 		
@@ -31,28 +32,28 @@ public class UserDAOJdbc implements UserDAO {
 				return user;
 			}
 		};
-		private Map<String, String> sqlMap;
+		private SqlService sqlService;
 				
 
 		public void setDataSource(DataSource dataSource) {
 			this.jdbcTemplate = new JdbcTemplate(dataSource);
 		}
 		
-		public void setSqlMap(Map<String,String> sqlMap) {
-			this.sqlMap = sqlMap;
+		public void setSqlService(SqlService sqlService) {
+			this.sqlService = sqlService;
 		}
 
 		@Override
 		public void add(final User user) {
 			// TODO Auto-generated method stub
-			this.jdbcTemplate.update(this.sqlMap.get("add"), 
+			this.jdbcTemplate.update(this.sqlService.getSql("userAdd"), 
 					user.getId(),user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
 		}
 		
 		@Override
 		public User get(String id) {
 			// TODO Auto-generated method stub
-			return this.jdbcTemplate.queryForObject(this.sqlMap.get("get"), 
+			return this.jdbcTemplate.queryForObject(this.sqlService.getSql("userGet"), 
 					new Object[] {id}, 
 					this.userMapper);
 		}
@@ -60,26 +61,26 @@ public class UserDAOJdbc implements UserDAO {
 		@Override
 		public List<User> getAll(){
 			// TODO Auto-generated method stub
-			return this.jdbcTemplate.query(this.sqlMap.get("getAll"), 
+			return this.jdbcTemplate.query(this.sqlService.getSql("userGetAll"), 
 					this.userMapper);
 		}
 		
 		@Override
 		public void deleteAll() {
 			// TODO Auto-generated method stub
-			this.jdbcTemplate.update(this.sqlMap.get("deleteAll"));
+			this.jdbcTemplate.update(this.sqlService.getSql("userDeleteAll"));
 		}
 		
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return this.jdbcTemplate.queryForObject(this.sqlMap.get("getCount"), Integer.class); 
+			return this.jdbcTemplate.queryForObject(this.sqlService.getSql("userGetCount"), Integer.class); 
 		}
 
 		@Override
 		public void update(User user) {
 			// TODO Auto-generated method stub
-			this.jdbcTemplate.update(this.sqlMap.get("update"),
+			this.jdbcTemplate.update(this.sqlService.getSql("userUpdate"),
 					user.getName(),user.getPassword(),user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail(), user.getId());
 		}
 		

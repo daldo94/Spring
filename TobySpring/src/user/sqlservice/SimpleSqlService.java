@@ -16,7 +16,7 @@ public class SimpleSqlService implements SqlService {
 		if(sql==null) {
 			throw new SqlRetrievalFailureException(key + "에 대한 sql을 찾을 수 없습니다.");
 		}else {
-			return sql;	
+			return sql;
 		}
 	}
 	

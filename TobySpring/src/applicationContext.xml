@@ -23,17 +23,7 @@
 		<property name="sqlService" ref="sqlService"></property>
 	</bean>
 	
-	<bean id="sqlService" class="user.sqlservice.SimpleSqlService">
-		<property name="sqlMap">
-			<map>
-				<entry key="userAdd" value="INSERT INTO USERS(ID, NAME, PASSWORD, LEVEL, LOGIN, RECOMMEND, EMAIL) VALUES(?,?,?,?,?,?,?)"/>
-				<entry key="userGet" value="SELECT * FROM USERS WHERE ID = ?" />
-				<entry key="userGetAll" value="SELECT * FROM USERS ORDER BY ID" />
-				<entry key="userDeleteAll" value="DELETE FROM USERS" />
-				<entry key="userGetCount" value="SELECT COUNT(*) FROM USERS" />
-				<entry key="userUpdate" value="UPDATE USERS SET NAME = ?, PASSWORD = ?, LEVEL = ?, LOGIN = ?, RECOMMEND = ?, EMAIL = ? WHERE ID = ?" />
-			</map>
-		</property>
+	<bean id="sqlService" class="user.sqlservice.XmlSqlService">
 	</bean>
 	
 <!--<bean id="userService" class="user.service.TxProxyFactoryBean">

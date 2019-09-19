@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlmap xmlns="http://www.example.org/myxsd" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://www.example.org/myxsd http://www.example.org/myxsd/sqlmap.xsd">
+		
+		<sql key="userAdd">INSERT INTO USERS(ID, NAME, PASSWORD, LEVEL, LOGIN, RECOMMEND, EMAIL) VALUES(?,?,?,?,?,?,?)</sql>
+		<sql key="userGet">SELECT * FROM USERS WHERE ID = ?</sql>
+		<sql key="userGetAll">SELECT * FROM USERS ORDER BY ID</sql>
+		<sql key="userDeleteAll">DELETE FROM USERS</sql>
+		<sql key="userGetCount">SELECT COUNT(*) FROM USERS</sql>
+		<sql key="userUpdate">UPDATE USERS SET NAME = ?, PASSWORD = ?, LEVEL = ?, LOGIN = ?, RECOMMEND = ?, EMAIL = ? WHERE ID = ?</sql>
+</sqlmap>

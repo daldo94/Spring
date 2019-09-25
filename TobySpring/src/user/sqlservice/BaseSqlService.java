@@ -2,6 +2,8 @@ package user.sqlservice;
 
 import javax.annotation.PostConstruct;
 
+
+
 public class BaseSqlService implements SqlService{
 	
 	protected SqlReader sqlReader;

@@ -26,7 +26,8 @@
 		<property name="sqlService" ref="sqlService"></property>
 	</bean>
 	
-	<bean id="sqlService" class="user.sqlservice.DefaultSqlService">
+	<bean id="sqlService" class="user.sqlservice.OxmSqlService">
+		<property name="unmarshaller" ref="unmarshaller"></property>
 	</bean>
 	
 	<!--  
@@ -42,14 +43,15 @@
 	
 	<bean id="sqlRegistry" class="user.sqlservice.HashMapSqlRegistry">
 	</bean>-->
-	<!--  
+
 	<bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="contextPath" value="user.sqlservice.jaxb"></property>
 	</bean>
-	-->
+	<!--  
 	<bean id="unmarshaller" class="org.springframework.oxm.castor.CastorMarshaller">
 		<property name="mappingLocation" value="learningtest/spring/oxm/mapping.xml"></property>
 	</bean>
+	-->
 	
 <!--<bean id="userService" class="user.service.TxProxyFactoryBean">
 		<property name="target" ref="userServiceImpl"></property>

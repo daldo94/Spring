@@ -28,6 +28,7 @@
 	
 	<bean id="sqlService" class="user.sqlservice.OxmSqlService">
 		<property name="unmarshaller" ref="unmarshaller"></property>
+		<property name="sqlmap" value="classpath:user/dao/sqlmap.xml"></property>
 	</bean>
 	
 	<!--  

@@ -17,7 +17,11 @@
 		http://www.springframework.org/schema/jdbc 
 		http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd">
 	
+	<!-- Don't need in java class && annotation setting(@PostConstruct) -->
+	<!-- Container enroll bean post processor automatically  -->
+	<!--  
 	<context:annotation-config/>
+	-->
 	
 	<!-- DB -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
@@ -50,14 +54,6 @@
 		<property name="contextPath" value="user.sqlservice.jaxb"></property>
 	</bean>
 
-
-	
-
-	
-
-
-
-	
 	<!-- aop -->
 	<tx:annotation-driven/>
 	

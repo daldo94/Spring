@@ -16,7 +16,10 @@
 		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd 
 		http://www.springframework.org/schema/jdbc 
 		http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd">
-		
+	
+	<context:annotation-config/>
+	
+	<!-- DB -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
 		<property name="url" value="jdbc:mysql://localhost/spring_db"/>
@@ -24,11 +27,12 @@
 		<property name="password" value="1234"/>
 	</bean>
 	
-	<bean id="userDAO" class="user.dao.UserDAOJdbc">
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="sqlService" ref="sqlService"></property>
 	</bean>
+
 	
+	<!--  SQL service -->
 	<bean id="sqlService" class="user.sqlservice.OxmSqlService">
 		<property name="unmarshaller" ref="unmarshaller"></property>
 		<property name="sqlRegistry" ref="sqlRegistry"></property>
@@ -42,73 +46,36 @@
 		<jdbc:script location="classpath:user/sqlservice/updatable/sqlRegistrySchema.sql"/>
 	</jdbc:embedded-database>
 	
-	<!--  
-	<bean id="sqlService" class="user.sqlservice.BaseSqlService">
-		<property name="sqlReader" ref="sqlReader"></property>
-		<property name="sqlRegistry" ref="sqlRegistry"></property>
-	</bean>
-	
-	
-	<bean id="sqlReader" class="user.sqlservice.JaxbXmlSqlReader">
-		<property name="sqlmapFile" value="sqlmap.xml"></property>
-	</bean>
-	
-	<bean id="sqlRegistry" class="user.sqlservice.HashMapSqlRegistry">
-	</bean>-->
-
 	<bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="contextPath" value="user.sqlservice.jaxb"></property>
 	</bean>
-	<!--  
-	<bean id="unmarshaller" class="org.springframework.oxm.castor.CastorMarshaller">
-		<property name="mappingLocation" value="learningtest/spring/oxm/mapping.xml"></property>
-	</bean>
-	-->
+
+
 	
-<!--<bean id="userService" class="user.service.TxProxyFactoryBean">
-		<property name="target" ref="userServiceImpl"></property>
-		<property name="transactionManager" ref="transactionManager"></property>
-		<property name="pattern" value="upgradeLevels"></property>
-		<property name="serviceInterface" value="user.service.UserService"></property>
-	</bean>-->
+
+	
+
+
+
+	
+	<!-- aop -->
+	<tx:annotation-driven/>
+	
+	<!-- application components -->	
+	<bean id="userDAO" class="user.dao.UserDAOJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="sqlService" ref="sqlService"></property>
+	</bean>
 	
 	<bean id="userService" class="user.service.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"></property>
 		<property name="mailSender" ref="mailSender"></property>
 	</bean>
 	
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"></property>
+	<bean id="testUserService" class="user.test.UserServiceTest$TestUserService" parent="userService">
 	</bean>
 	
 	<bean id="mailSender" class="user.service.DummyMailSender">
 	</bean>
-<!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="mail.server.com"></property>
-	</bean>-->
 	
-	<!--  <bean class = "org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
-	</bean>
-	-->
-<!--<bean id="transactionAdvice" class="user.service.TransactionAdvice">
-		<property name="transactionManager" ref="transactionManager"></property>
-	</bean>-->
-	<!--  <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
-	    <tx:attributes>
-			<tx:method name="get*" read-only="true"/>
-			<tx:method name="*"/>
-		</tx:attributes> 
-	</tx:advice>-->
-	
-	
-	<!--  <aop:config>
-		<aop:advisor advice-ref="transactionAdvice" pointcut="bean(*Service)"/>
-	</aop:config>
-	-->
-	<bean id="testUserService" class="user.test.UserServiceTest$TestUserService" parent="userService">
-	</bean>
-	
-	<tx:annotation-driven/>
-	
-	<context:annotation-config/>
 </beans>

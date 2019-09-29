@@ -36,6 +36,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import setting.TestApplicationContext;
 import user.dao.UserDAO;
 import user.domain.Level;
 import user.domain.User;
@@ -43,7 +44,8 @@ import user.service.UserService;
 import user.service.UserServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations =  "/applicationContext.xml")
+//@ContextConfiguration(locations =  "/applicationContext.xml")
+@ContextConfiguration(classes=TestApplicationContext.class)
 public class UserServiceTest {
 	@Autowired
 	ApplicationContext context;

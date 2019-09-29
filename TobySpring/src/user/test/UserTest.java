@@ -12,8 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import user.domain.Level;
 import user.domain.User;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations =  "/applicationContext.xml")
+
 public class UserTest {
 	User user;
 	

@@ -34,11 +34,12 @@
 		<property name="sqlRegistry" ref="sqlRegistry"></property>
 	</bean>
 	
-	<bean id="sqlRegistry" class="user.sqlservice.updatable.ConcurrentHashMapSqlRegistry">
+	<bean id="sqlRegistry" class="user.sqlservice.updatable.EmbeddedDbSqlRegistry">
+		<property name="dataSource" ref="embeddedDatabase"></property>
 	</bean>
 	
 	<jdbc:embedded-database id="embeddedDatabase" type="HSQL">
-		<jdbc:script location="classpath:learningtest/spring/embeddeddb/schema.sql"/>
+		<jdbc:script location="classpath:user/sqlservice/updatable/sqlRegistrySchema.sql"/>
 	</jdbc:embedded-database>
 	
 	<!--  

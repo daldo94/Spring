@@ -1,4 +1,4 @@
-package issuetracker.sqlservice;
+package user.sqlservice.updatable;
 
 import java.util.Map;
 

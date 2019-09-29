@@ -1,4 +1,4 @@
-package issuetracker.sqlservice;
+package user.sqlservice.updatable;
 
 public class SqlUpdateFailureException extends RuntimeException{
 	

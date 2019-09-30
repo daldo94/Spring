@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -32,13 +33,16 @@ public class UserDAOJdbc implements UserDAO {
 				return user;
 			}
 		};
+		@Autowired
 		private SqlService sqlService;
 				
-
+		
+		@Autowired
 		public void setDataSource(DataSource dataSource) {
 			this.jdbcTemplate = new JdbcTemplate(dataSource);
 		}
 		
+		//Can be omitted
 		public void setSqlService(SqlService sqlService) {
 			this.sqlService = sqlService;
 		}

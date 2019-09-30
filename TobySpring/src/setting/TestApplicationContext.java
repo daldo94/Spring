@@ -34,7 +34,6 @@ import user.test.UserServiceTest.TestUserService;
 @Configuration
 @EnableTransactionManagement
 public class TestApplicationContext {
-	//@Autowired SqlService sqlService;
 	//@Resource DataSource embeddedDatabase;
 	
 	/**
@@ -58,16 +57,13 @@ public class TestApplicationContext {
 		tm.setDataSource(dataSource());
 		return tm;
 	}
-	
+
 	/**
 	 * Application logic and Test
 	 */
 	@Bean
 	public UserDAO userDAO(){
-		UserDAOJdbc dao = new UserDAOJdbc();
-		dao.setDataSource(dataSource());
-		dao.setSqlService(sqlService());
-		return dao;
+		return new UserDAOJdbc();
 	}
 	
 	@Bean

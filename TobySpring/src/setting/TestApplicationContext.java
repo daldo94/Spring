@@ -69,7 +69,7 @@ public class TestApplicationContext {
 	public UserDAO userDAO(){
 		return new UserDAOJdbc();
 	}*/
-	
+	/*
 	@Bean
 	public UserService userService() {
 		UserServiceImpl service = new UserServiceImpl();
@@ -77,7 +77,7 @@ public class TestApplicationContext {
 		service.setMailSender(mailSender());
 		return service;
 	}
-	
+	*/
 	@Bean
 	public UserService testUserService() {
 		TestUserService testService = new TestUserService();

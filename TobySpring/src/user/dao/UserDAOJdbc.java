@@ -10,11 +10,13 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import user.domain.Level;
 import user.domain.User;
 import user.sqlservice.SqlService;
 
+@Component
 public class UserDAOJdbc implements UserDAO {
 		
 		private JdbcTemplate jdbcTemplate;

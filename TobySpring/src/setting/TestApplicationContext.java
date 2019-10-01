@@ -2,13 +2,13 @@ package setting;
 
 import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -33,8 +33,11 @@ import user.test.UserServiceTest.TestUserService;
 
 @Configuration
 @EnableTransactionManagement
+@ComponentScan(basePackages = "user")
 public class TestApplicationContext {
 	//@Resource DataSource embeddedDatabase;
+	@Autowired 
+	UserDAO userDAO;
 	
 	/**
 	 * DB Connection and Transaction
@@ -61,15 +64,16 @@ public class TestApplicationContext {
 	/**
 	 * Application logic and Test
 	 */
+	/*
 	@Bean
 	public UserDAO userDAO(){
 		return new UserDAOJdbc();
-	}
+	}*/
 	
 	@Bean
 	public UserService userService() {
 		UserServiceImpl service = new UserServiceImpl();
-		service.setUserDAO(userDAO());
+		service.setUserDAO(this.userDAO);
 		service.setMailSender(mailSender());
 		return service;
 	}
@@ -77,7 +81,7 @@ public class TestApplicationContext {
 	@Bean
 	public UserService testUserService() {
 		TestUserService testService = new TestUserService();
-		testService.setUserDAO(userDAO());
+		testService.setUserDAO(this.userDAO);
 		testService.setMailSender(mailSender());
 		return testService;
 	}

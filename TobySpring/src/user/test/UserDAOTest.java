@@ -27,14 +27,14 @@ public class UserDAOTest {
 	//@Autowired
 	//private ApplicationContext context;
 	@Autowired
-	private UserDAO dao;
+	private UserDAO userDAO;
 	private User user1;
 	private User user2;
 	private User user3;
 	
 	@Before
 	public void setUp() {	
-		//this.dao = context.getBean("userDAO",UserDAO.class);
+		//this.userDAO = context.getBean("useruserDAO",UseruserDAO.class);
 		
 		this.user1 = new User("dohyun1","±èµµÇö1","1234", Level.BASIC, 1, 0, "kimdohyunlll@naver.com");
 		this.user2 = new User("dohyun2","±èµµÇö2","1234", Level.SILVER, 55, 10, "kimdohyunlll@naver.com");
@@ -44,18 +44,18 @@ public class UserDAOTest {
 	@Test
 	public void addAndGet() throws SQLException {
 
-		dao.deleteAll();
-		assertThat(dao.getCount(), is(0));
+		userDAO.deleteAll();
+		assertThat(userDAO.getCount(), is(0));
 		
 		
-		dao.add(user1);
-		dao.add(user2);
-		assertThat(dao.getCount(), is(2));
+		userDAO.add(user1);
+		userDAO.add(user2);
+		assertThat(userDAO.getCount(), is(2));
 		
-		User userGet1 = dao.get(user1.getId());
+		User userGet1 = userDAO.get(user1.getId());
 		checkSameUser(userGet1, user1);
 		
-		User userGet2 = dao.get(user2.getId());
+		User userGet2 = userDAO.get(user2.getId());
 		checkSameUser(userGet2, user2);
 		
 	}
@@ -63,51 +63,51 @@ public class UserDAOTest {
 	@Test
 	public void count() throws SQLException{
 		
-		dao.deleteAll();
-		assertThat(dao.getCount(),is(0));
+		userDAO.deleteAll();
+		assertThat(userDAO.getCount(),is(0));
 		
-		dao.add(user1);
-		assertThat(dao.getCount(),is(1));
+		userDAO.add(user1);
+		assertThat(userDAO.getCount(),is(1));
 		
-		dao.add(user2);
-		assertThat(dao.getCount(),is(2));
+		userDAO.add(user2);
+		assertThat(userDAO.getCount(),is(2));
 		
-		dao.add(user3);
-		assertThat(dao.getCount(),is(3));
+		userDAO.add(user3);
+		assertThat(userDAO.getCount(),is(3));
 		
 	}
 	
 	@Test(expected = EmptyResultDataAccessException.class)
 	public void getUserFailure() throws SQLException{
 
-		dao.deleteAll();
-		assertThat(dao.getCount(), is(0));
+		userDAO.deleteAll();
+		assertThat(userDAO.getCount(), is(0));
 
-		dao.get("unknown_id");
+		userDAO.get("unknown_id");
 		
 	}
 	
 	@Test
 	public void getAll() throws SQLException{
-		dao.deleteAll();
+		userDAO.deleteAll();
 		
-		List<User> users0 = dao.getAll();
+		List<User> users0 = userDAO.getAll();
 		assertThat(users0.size(), is(0));
 		
-		dao.add(user1);
-		List<User> users1 = dao.getAll();
+		userDAO.add(user1);
+		List<User> users1 = userDAO.getAll();
 		assertThat(users1.size(), is(1));
 		checkSameUser(user1, users1.get(0));
 		
 		
-		dao.add(user2);
-		List<User> users2 = dao.getAll();
+		userDAO.add(user2);
+		List<User> users2 = userDAO.getAll();
 		assertThat(users2.size(), is(2));
 		checkSameUser(user1, users2.get(0));
 		checkSameUser(user2, users2.get(1));
 		
-		dao.add(user3);
-		List<User> users3 = dao.getAll();
+		userDAO.add(user3);
+		List<User> users3 = userDAO.getAll();
 		assertThat(users3.size(), is(3));
 		checkSameUser(user1, users3.get(0));
 		checkSameUser(user2, users3.get(1));
@@ -128,30 +128,30 @@ public class UserDAOTest {
 	@Test(expected = DataAccessException.class)
 	public void duplicateKey() {
 		
-		dao.deleteAll();
+		userDAO.deleteAll();
 		
-		dao.add(user1);
-		dao.add(user1);
+		userDAO.add(user1);
+		userDAO.add(user1);
 	}
 	
 	@Test
 	public void update() {
-		dao.deleteAll();
+		userDAO.deleteAll();
 		
-		dao.add(user1);
-		dao.add(user2);
+		userDAO.add(user1);
+		userDAO.add(user2);
 		
 		user1.setName("±èµµÇö4");
 		user1.setPassword("1234");
 		user1.setLevel(Level.GOLD);
 		user1.setLogin(1000);
 		user1.setRecommend(999);
-		dao.update(user1);
+		userDAO.update(user1);
 		
-		User user1Update = dao.get(user1.getId());
+		User user1Update = userDAO.get(user1.getId());
 		checkSameUser(user1, user1Update);
 		
-		User user2Same = dao.get(user2.getId());
+		User user2Same = userDAO.get(user2.getId());
 		checkSameUser(user2, user2Same);
 	}
 

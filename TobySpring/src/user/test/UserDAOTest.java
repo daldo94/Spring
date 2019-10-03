@@ -18,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import setting.AppContext;
-import setting.TestAppContext;
 import user.dao.UserDAO;
 import user.domain.Level;
 import user.domain.User;

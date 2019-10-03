@@ -36,7 +36,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import setting.AppContext;
-import setting.TestAppContext;
 import user.dao.UserDAO;
 import user.domain.Level;
 import user.domain.User;

@@ -62,6 +62,11 @@ public class AppContext {
 		tm.setDataSource(dataSource());
 		return tm;
 	}
+	
+	@Bean
+	public SqlMapConfig sqlMapConfig() {
+		return new UserSqlMapConfig();
+	}
 
 	@Configuration
 	@Profile("production")

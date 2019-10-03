@@ -1,58 +1,53 @@
 package setting;
 
-import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
-
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.oxm.Unmarshaller;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.mysql.jdbc.Driver;
-
-import user.dao.UserDAO;
-import user.dao.UserDAOJdbc;
 import user.service.DummyMailSender;
 import user.service.UserService;
-import user.service.UserServiceImpl;
-import user.sqlservice.OxmSqlService;
-import user.sqlservice.SqlRegistry;
-import user.sqlservice.SqlService;
-import user.sqlservice.updatable.EmbeddedDbSqlRegistry;
 import user.test.UserServiceTest.TestUserService;
 
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "user")
 @Import(SqlServiceContext.class)
+@PropertySource("/database.properties")
 public class AppContext {
+	
+	@Autowired
+	Environment env;
 	
 	/**
 	 * DB Connection and Transaction
 	 */
 	@Bean
 	public DataSource dataSource(){
-		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+
+		SimpleDriverDataSource ds = new SimpleDriverDataSource();
+		try {
+			ds.setDriverClass((Class<? extends java.sql.Driver>)Class.forName(env.getProperty("db.driverClass")));
+		}catch(ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+		ds.setUrl(env.getProperty("db.url"));
+		ds.setUsername(env.getProperty("db.username"));
+		ds.setPassword(env.getProperty("db.password"));
 		
-		dataSource.setDriverClass(Driver.class);
-		dataSource.setUrl("jdbc:mysql://localhost/spring_db");
-		dataSource.setUsername("dohyun");
-		dataSource.setPassword("1234");
-		
-		return dataSource;
+		return ds;
 	}
 	
 	@Bean

@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailException;
@@ -48,6 +49,8 @@ import user.service.UserServiceImpl;
 @ContextConfiguration(classes= AppContext.class)
 public class UserServiceTest {
 	@Autowired
+	DefaultListableBeanFactory bf;
+	@Autowired
 	ApplicationContext context;
 	@Autowired
 	private UserService userService;
@@ -60,6 +63,7 @@ public class UserServiceTest {
 	@Autowired
 	MailSender mailSender;
 	
+	
 	List<User> users;
 	
 	@Before
@@ -71,6 +75,13 @@ public class UserServiceTest {
 				new User("dohyun4","±èµµÇö4","1234", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD, "kimdohyunlll@naver.com"),
 				new User("dohyun5","±èµµÇö5","1234", Level.GOLD, 100, Integer.MAX_VALUE, "kimdohyunlll@naver.com")
 		);
+	}
+	
+	@Test
+	public void beans() {
+		for(String n : bf.getBeanDefinitionNames()) {
+			System.out.println(n + " \t " + bf.getBean(n).getClass().getName());
+		}
 	}
 	
 	@Test

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
@@ -27,6 +28,8 @@ import user.domain.User;
 @ActiveProfiles("test")
 @ContextConfiguration(classes= AppContext.class)
 public class UserDAOTest {
+	@Autowired
+	DefaultListableBeanFactory bf;
 	//@Autowired
 	//private ApplicationContext context;
 	@Autowired
@@ -43,7 +46,14 @@ public class UserDAOTest {
 		this.user2 = new User("dohyun2","±èµµÇö2","1234", Level.SILVER, 55, 10, "kimdohyunlll@naver.com");
 		this.user3 = new User("dohyun3","±èµµÇö3","1234", Level.GOLD, 100, 40, "kimdohyunlll@naver.com");
 	}
-
+	
+	@Test
+	public void beans() {
+		for(String n : bf.getBeanDefinitionNames()) {
+			System.out.println(n + " \t " + bf.getBean(n).getClass().getName());
+		}
+	}
+	
 	@Test
 	public void addAndGet() throws SQLException {
 

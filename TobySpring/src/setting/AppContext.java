@@ -31,6 +31,7 @@ import user.test.UserServiceTest.TestUserService;
 @EnableTransactionManagement
 @ComponentScan(basePackages = "user")
 @Import(SqlServiceContext.class)
+//@EnableSqlService
 @PropertySource("/database.properties")
 public class AppContext implements SqlMapConfig {
 	

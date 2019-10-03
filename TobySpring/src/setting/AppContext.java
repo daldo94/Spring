@@ -35,7 +35,7 @@ import user.test.UserServiceTest.TestUserService;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "user")
-@Import(SqlServiceContext.class)
+@Import({SqlServiceContext.class, TestAppContext.class, ProductionAppContext.class})
 public class AppContext {
 	//@Resource DataSource embeddedDatabase;
 	@Autowired 

@@ -14,10 +14,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
+
 public class EmbeddedDbTest {
 	EmbeddedDatabase db;
 	JdbcTemplate template;
-	
+
 	@Before
 	public void setUp() {
 		db = new EmbeddedDatabaseBuilder()

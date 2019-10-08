@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,7 +26,7 @@ import user.domain.User;
 @RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(locations = "/applicationContext.xml")
 @ActiveProfiles("test")
-@ContextConfiguration(classes= AppContext.class)
+@ContextConfiguration(classes = AppContext.class)
 public class UserDAOTest {
 	@Autowired
 	DefaultListableBeanFactory bf;

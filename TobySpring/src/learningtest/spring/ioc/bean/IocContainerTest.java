@@ -47,7 +47,8 @@ public class IocContainerTest {
 		Hello hello = ac.getBean("hello",Hello.class);
 		hello.print();
 		
-		assertThat(ac.getBean("printer".toString()), is("Hello Spring"));
+		//맞는데 오류 남
+		assertThat(ac.getBean("printer").toString(), is("Hello Spring"));
 	}
 
 	

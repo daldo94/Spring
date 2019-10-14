@@ -1,4 +1,4 @@
-package learningtest.spring.ioc.bean;
+package learningtest.spring.ioc;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -10,11 +10,19 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
+
+import learningtest.spring.ioc.bean.Hello;
+import learningtest.spring.ioc.bean.Printer;
+import learningtest.spring.ioc.bean.StringPrinter;
 
 public class IocContainerTest {
+	private String basePath = StringUtils.cleanPath(ClassUtils.classPackageAsResourcePath(getClass())) + "/";
 	
 	@Test
 	public void registerBean() {
@@ -68,6 +76,26 @@ public class IocContainerTest {
 		hello.print();
 		
 		assertThat(ac.getBean("printer").toString(), is("Hello Spring"));
+	}
+	
+	@Test
+	public void parentChildContext() {
+		ApplicationContext parent = new GenericXmlApplicationContext(basePath + "parentContext.xml");
+		
+		GenericApplicationContext child = new GenericApplicationContext(parent);
+		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(child);
+		reader.loadBeanDefinitions(basePath + "childContext.xml");
+		child.refresh();
+		
+		Printer printer = child.getBean("printer", Printer.class);
+		assertThat(printer, is(notNullValue()));
+		
+		Hello hello = child.getBean("hello", Hello.class);
+		assertThat(hello, is(notNullValue()));
+		
+		hello.print();
+		assertThat(printer.toString(), is("Hello Child"));
+
 	}
 	
 }

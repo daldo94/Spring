@@ -3,6 +3,7 @@ package learningtest.spring.ioc;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import learningtest.spring.ioc.bean.AnnotatedHello;
+import learningtest.spring.ioc.bean.AnnotatedHelloConfig;
 import learningtest.spring.ioc.bean.Hello;
 import learningtest.spring.ioc.bean.Printer;
 import learningtest.spring.ioc.bean.StringPrinter;
@@ -108,6 +110,19 @@ public class IocContainerTest {
 		AnnotatedHello hello = ctx.getBean("myAnnotatedHello",AnnotatedHello.class);
 		assertThat(hello, is(notNullValue()));
 	
+	}
+	
+	@Test
+	public void annotatedConfigTest() {
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(AnnotatedHelloConfig.class);
+		AnnotatedHello hello = ctx.getBean("annotatedHello", AnnotatedHello.class);
+		assertThat(hello, is(notNullValue()));
+		
+		AnnotatedHelloConfig config = ctx.getBean("annotatedHelloConfig",AnnotatedHelloConfig.class);
+		assertThat(config, is(notNullValue()));
+		
+		//singleton
+		assertThat(config.annotatedHello(), is(sameInstance(hello)));
 	}
 	
 }
